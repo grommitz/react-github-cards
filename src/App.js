@@ -2,11 +2,29 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+let data = [
+  {
+    name:"Martin Charlesworth", 
+    avatar_url:"https://avatars0.githubusercontent.com/u/2547666?v=4",
+    company:"CSC"
+  },
+  {
+    name:"Diabolic Developer",
+    avatar_url:"https://avatars0.githubusercontent.com/u/254123?v=4",
+    company:"XXX"
+  },
+  {
+    name:"Terry",
+    avatar_url:"https://avatars2.githubusercontent.com/u/32106?v=4",
+    company:"Company" 
+  }
+];
+
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <CardList/>
+        <CardList cards={data}/>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
@@ -26,6 +44,7 @@ class App extends Component {
   }
 }
 
+
 const Card = (props) => {
   return (
       <div style={{margin: '1em'}}>
@@ -42,15 +61,7 @@ const Card = (props) => {
 const CardList = (props) => {
   return (
       <div>
-          <Card name="Martin Charlesworth" 
-              avatar_url="https://avatars0.githubusercontent.com/u/2547666?v=4"
-              company="CSC"/>
-          <Card name="Diabolic Developer" 
-              avatar_url="https://avatars0.githubusercontent.com/u/254123?v=4"
-              company="XXX"/>
-          <Card name="Terry" 
-              avatar_url="https://avatars2.githubusercontent.com/u/32106?v=4"
-              company="Company"/>
+        {props.cards.map(card => <Card {...card}/>)} // spread operator!
       </div>
   )
 };
