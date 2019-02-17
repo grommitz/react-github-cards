@@ -6,14 +6,10 @@ class App extends Component {
   state = {
     cardData: [
       {
+        id: 7777,
         name:"Martin Charlesworth", 
         avatar_url:"https://avatars0.githubusercontent.com/u/2547666?v=4",
         company:"CSC"
-      },
-      {
-        name:"Diabolic Developer",
-        avatar_url:"https://avatars0.githubusercontent.com/u/254123?v=4",
-        company:"XXX"
       }
     ]
   };
@@ -43,6 +39,7 @@ class Form extends React.Component {
       .then(resp => {
         console.log("API RESPONSE: ", resp.data);
         this.props.onSubmit(resp.data);
+        this.setState({ userName: ''});
       });
   };
   render() {
@@ -74,7 +71,7 @@ const Card = (props) => {
 const CardList = (props) => {
   return (
       <div>
-        {props.cards.map(card => <Card {...card}/>)}
+        {props.cards.map(card => <Card key={card.id} {...card}/>)}
       </div>
   )
 };
