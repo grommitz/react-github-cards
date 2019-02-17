@@ -1,49 +1,62 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-let data = [
-  {
-    name:"Martin Charlesworth", 
-    avatar_url:"https://avatars0.githubusercontent.com/u/2547666?v=4",
-    company:"CSC"
-  },
-  {
-    name:"Diabolic Developer",
-    avatar_url:"https://avatars0.githubusercontent.com/u/254123?v=4",
-    company:"XXX"
-  },
-  {
-    name:"Terry",
-    avatar_url:"https://avatars2.githubusercontent.com/u/32106?v=4",
-    company:"Company" 
-  }
-];
+import axios from 'axios';
 
 class App extends Component {
+  state = {
+    cardData: [
+      {
+        name:"Martin Charlesworth", 
+        avatar_url:"https://avatars0.githubusercontent.com/u/2547666?v=4",
+        company:"CSC"
+      },
+      {
+        name:"Diabolic Developer",
+        avatar_url:"https://avatars0.githubusercontent.com/u/254123?v=4",
+        company:"XXX"
+      }
+    ]
+  };
+  addNewCard = (cardInfo) => {
+    this.setState(prevState => ({
+      cardData: prevState.cardData.concat(cardInfo)
+    }));
+  };
   render() {
     return (
       <div className="App">
-        <CardList cards={data}/>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Form onSubmit={this.addNewCard} />
+        <CardList cards={this.state.cardData}/>
       </div>
     );
   }
 }
 
+class Form extends React.Component {
+  state = {
+    userName : ""
+  };
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("sumitted!", this.state.userName);
+    axios.get("https://api.github.com/users/" + this.state.userName)
+      .then(resp => {
+        console.log("API RESPONSE: ", resp.data);
+        this.props.onSubmit(resp.data);
+      });
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          value={this.state.userName}
+          onChange={(event) => this.setState({ userName : event.target.value })} 
+          type="text" placeholder="github user name" required/>
+        <button type="submit">Add card</button>
+      </form>
+    )
+  };
+}
 
 const Card = (props) => {
   return (
@@ -61,7 +74,7 @@ const Card = (props) => {
 const CardList = (props) => {
   return (
       <div>
-        {props.cards.map(card => <Card {...card}/>)} // spread operator!
+        {props.cards.map(card => <Card {...card}/>)}
       </div>
   )
 };
